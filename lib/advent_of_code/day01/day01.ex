@@ -5,6 +5,11 @@ defmodule AdventOfCode.Day01 do
     input
   end
 
+  @spec solution :: %{puzzle1: number, puzzle2: number}
+  def solution do
+    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
+  end
+
   @spec puzzle1(binary) :: number
   def puzzle1(input) do
     input
@@ -30,7 +35,6 @@ defmodule AdventOfCode.Day01 do
     |> String.split("\n\n")
     |> Enum.map(&String.split(&1, "\n", trim: true))
     |> Enum.map(fn (arr) -> Enum.map(arr, &String.to_integer(&1)) end)
-
   end
 
   @spec calories_per_elf(any) :: list
