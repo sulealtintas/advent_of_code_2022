@@ -28,7 +28,7 @@ defmodule AdventOfCode.Day01 do
     input
     |> String.split("\n\n")
     |> Enum.map(&String.split(&1, "\n", trim: true))
-    |> Enum.map(fn (arr) -> Enum.map(arr, &String.to_integer(&1)) end)
+    |> Enum.map(fn arr -> Enum.map(arr, &String.to_integer(&1)) end)
     |> Enum.map(&Enum.sum(&1))
     |> Enum.sort(:desc)
   end

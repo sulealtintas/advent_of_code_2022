@@ -45,6 +45,7 @@ defmodule AdventOfCode.Day02 do
   defp score2(round) do
     [move_letter, strategy] = round
     opponent_move = to_move(move_letter)
+
     case strategy do
       "X" -> 0 + losing_move(opponent_move)
       "Y" -> 3 + opponent_move
@@ -64,7 +65,7 @@ defmodule AdventOfCode.Day02 do
   end
 
   defp losing_move(opponent_move) do
-    rem((opponent_move + 1), 3) + 1
+    rem(opponent_move + 1, 3) + 1
   end
 
   defp winning_move(opponent_move) do
