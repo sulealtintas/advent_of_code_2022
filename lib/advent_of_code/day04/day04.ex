@@ -12,38 +12,32 @@ defmodule AdventOfCode.Day04 do
   @spec puzzle1(binary) :: number
   def puzzle1(input) do
     input
-    |> to_sets()
-    |> Enum.filter(fn [set1, set2] -> one_set_contains_other?(set1, set2) end)
+    |> String.split("\n", trim: true)
+    |> Enum.map(&to_boundaries/1)
+    |> Enum.filter(&one_range_contains_other?/1)
     |> length()
   end
 
   @spec puzzle2(binary) :: number
   def puzzle2(input) do
     input
-    |> to_sets()
-    |> Enum.filter(fn [set1, set2] -> sets_overlap?(set1, set2) end)
+    |> String.split("\n", trim: true)
+    |> Enum.map(&to_boundaries/1)
+    |> Enum.filter(&ranges_overlap?/1)
     |> length()
   end
 
-  defp to_sets(input) do
-    input
-    |> String.split("\n", trim: true)
-    |> Enum.map(&to_ranges/1)
-    |> Enum.map(fn [range1, range2] -> [MapSet.new(range1), MapSet.new(range2)] end)
+  defp to_boundaries(line) do
+    line
+    |> String.split([",", "-"])
+    |> Enum.map(&String.to_integer/1)
   end
 
-  defp to_ranges(str) do
-    [fst, snd] = str |> String.split(",")
-    [a, b] = fst |> String.split("-") |> Enum.map(&String.to_integer/1)
-    [c, d] = snd |> String.split("-") |> Enum.map(&String.to_integer/1)
-    [a..b, c..d]
+  defp one_range_contains_other?([a, b, c, d]) do
+    (a >= c && b <= d) or (a <= c && b >= d)
   end
 
-  defp one_set_contains_other?(set1, set2) do
-    MapSet.subset?(set1, set2) || MapSet.subset?(set2, set1)
-  end
-
-  defp sets_overlap?(set1, set2) do
-    MapSet.intersection(set1, set2) |> MapSet.size() > 0
+  defp ranges_overlap?([a, b, c, d]) do
+    max(a, c) <= min(b, d)
   end
 end

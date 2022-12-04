@@ -36,17 +36,13 @@ defmodule AdventOfCode.Day03 do
     Enum.chunk_every(backpack, size)
   end
 
-  defp find_common_item(compartments) do
-    [fst, snd] = compartments
-
+  defp find_common_item([fst, snd]) do
     MapSet.new(fst)
     |> MapSet.intersection(MapSet.new(snd))
     |> Enum.at(0)
   end
 
-  defp find_badge(backpacks) do
-    [fst, snd, trd] = backpacks
-
+  defp find_badge([fst, snd, trd]) do
     MapSet.new(fst)
     |> MapSet.intersection(MapSet.new(snd))
     |> MapSet.intersection(MapSet.new(trd))
