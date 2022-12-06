@@ -4,6 +4,7 @@ defmodule AdventOfCode.Day05 do
     AdventOfCode.read_input(5)
   end
 
+  @spec solution :: %{puzzle1: binary, puzzle2: binary}
   def solution do
     %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
   end
@@ -19,6 +20,7 @@ defmodule AdventOfCode.Day05 do
     |> Enum.join()
   end
 
+  @spec puzzle2(binary) :: binary
   def puzzle2(input) do
     {crates, commands} = parse(input)
 
