@@ -40,27 +40,19 @@ defmodule AdventOfCode.Day05 do
     |> List.replace_at(to, stack_pushed_to)
   end
 
-  defp crate_mover_9000(crates, count, from, to) do
+  defp crate_mover_9000(crates, %{move: count, from: from, to: to}) do
     Enum.reduce(1..count, crates, fn _i, acc ->
       crate_mover_9000(acc, 1, from, to)
     end)
   end
 
-  defp crate_mover_9000(crates, command) do
-    crate_mover_9000(crates, command[:move], command[:from] - 1, command[:to] - 1)
-  end
-
-  defp crate_mover_9001(crates, count, from, to) do
+  defp crate_mover_9001(crates, %{move: count, from: from, to: to}) do
     {moved_crates, stack_removed_from} = Enum.at(crates, from) |> Enum.split(count)
     stack_pushed_to = moved_crates ++ Enum.at(crates, to)
 
     crates
     |> List.replace_at(from, stack_removed_from)
     |> List.replace_at(to, stack_pushed_to)
-  end
-
-  defp crate_mover_9001(crates, command) do
-    crate_mover_9001(crates, command[:move], command[:from] - 1, command[:to] - 1)
   end
 
   defp parse(input) do
@@ -77,6 +69,9 @@ defmodule AdventOfCode.Day05 do
       |> Enum.chunk_every(2)
       |> Enum.map(fn [k, v] -> {String.to_atom(k), String.to_integer(v)} end)
       |> Enum.into(%{})
+      |> (fn %{move: count, from: from, to: to} ->
+            %{move: count, from: from - 1, to: to - 1}
+          end).()
     end)
   end
 
