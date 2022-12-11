@@ -13,17 +13,18 @@ defmodule AdventOfCode.Day09 do
   def puzzle1(input) do
     input
     |> parse_commands()
-    |> head_history()
-    |> Enum.reduce([{0, 0}], fn head, tails ->
-      [move_tail(head, Enum.at(tails, 0)) | tails]
-    end)
+    |> trace_tail([{0, 0}])
     |> Enum.uniq()
     |> length
   end
 
   @spec puzzle2(binary) :: non_neg_integer
-  def puzzle2(_input) do
-    1
+  def puzzle2(input) do
+    input
+    |> parse_commands()
+    |> trace_tail(List.duplicate({0, 0}, 9))
+    |> Enum.uniq()
+    |> length
   end
 
   defp parse_commands(input) do
@@ -32,43 +33,46 @@ defmodule AdventOfCode.Day09 do
     |> Enum.map(fn line ->
       line
       |> String.split(" ")
-      |> (fn [d, s] ->
-            %{direction: to_direction(d), steps: String.to_integer(s)}
-          end).()
+      |> (fn [direction, n] -> {direction, String.to_integer(n)} end).()
+      |> (fn {direction, n} -> List.duplicate(direction, n) end).()
     end)
+    |> List.flatten()
   end
 
-  defp head_history(commands, head \\ {0, 0}, history \\ [{0, 0}]) do
+  defp trace_tail(commands, knots, head \\ {0, 0}, history \\ [{0, 0}]) do
     case commands do
       [] ->
         history
 
-      [command | rst] ->
-        visited = move_head(command, head)
-        head_history(rst, List.last(visited), history ++ visited)
+      [direction | rst] ->
+        head_new = move_head(head, direction)
+
+        [_ | knots_new] =
+          Enum.reduce(knots, [head_new], fn knot, positions ->
+            [move_knot(List.first(positions), knot) | positions]
+          end)
+          |> Enum.reverse()
+
+        trace_tail(rst, knots_new, head_new, [List.last(knots_new) | history])
     end
   end
 
-  defp move_head(%{direction: {dx, dy}, steps: s}, {x, y}) do
-    Enum.map(1..s, fn s -> {x + dx * s, y + dy * s} end)
+  defp move_head({x, y}, direction) do
+    case direction do
+      "U" -> {x, y + 1}
+      "R" -> {x + 1, y}
+      "D" -> {x, y - 1}
+      "L" -> {x - 1, y}
+    end
   end
 
-  defp move_tail({x_head, y_head}, {x_tail, y_tail}) do
+  defp move_knot({x1, y1}, {x2, y2}) do
     cond do
-      adjacent?({x_head, y_head}, {x_tail, y_tail}) ->
-        {x_tail, y_tail}
+      adjacent?({x1, y1}, {x2, y2}) ->
+        {x2, y2}
 
       true ->
-        {x_tail + sign(x_head - x_tail), y_tail + sign(y_head - y_tail)}
-    end
-  end
-
-  defp to_direction(char) do
-    case char do
-      "U" -> {0, 1}
-      "R" -> {1, 0}
-      "D" -> {0, -1}
-      "L" -> {-1, 0}
+        {x2 + sign(x1 - x2), y2 + sign(y1 - y2)}
     end
   end
 
