@@ -33,8 +33,8 @@ defmodule AdventOfCode.Day09 do
     |> Enum.map(fn line ->
       line
       |> String.split(" ")
-      |> (fn [direction, n] -> {direction, String.to_integer(n)} end).()
-      |> (fn {direction, n} -> List.duplicate(direction, n) end).()
+      |> then(fn [direction, n] -> {direction, String.to_integer(n)} end)
+      |> then(fn {direction, n} -> List.duplicate(direction, n) end)
     end)
     |> List.flatten()
   end

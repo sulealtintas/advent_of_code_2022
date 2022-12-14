@@ -45,13 +45,9 @@ defmodule AdventOfCode.Day11 do
 
   defp play_rounds(monkeys, n, multiple, worry_divisor) do
     Enum.reduce(1..n, monkeys, fn _i, acc ->
-      play_single_round(acc, multiple, worry_divisor)
-    end)
-  end
-
-  defp play_single_round(monkeys, multiple, worry_divisor) do
-    Enum.reduce(0..(Enum.count(monkeys) - 1), monkeys, fn id, acc ->
-      take_turn(acc, id, multiple, worry_divisor)
+      Enum.reduce(0..(Enum.count(acc) - 1), acc, fn id, round ->
+        take_turn(round, id, multiple, worry_divisor)
+      end)
     end)
   end
 
