@@ -1,4 +1,5 @@
 defmodule Packets do
+  @spec compare(any, any) :: :eq | :gt | :lt
   def compare(a, a), do: :eq
   def compare(a, b) when is_integer(a) and is_integer(b) and a < b, do: :lt
   def compare(a, b) when is_integer(a) and is_integer(b) and a > b, do: :gt
@@ -19,14 +20,12 @@ end
 
 defmodule AdventOfCode.Day13 do
   @spec input :: binary
-  def input do
-    AdventOfCode.read_input(13)
-  end
+  def input, do: AdventOfCode.read_input(13)
 
-  def solution do
-    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
-  end
+  @spec solution :: %{p1: number, p2: number}
+  def solution, do: %{p1: puzzle1(input()), p2: puzzle2(input())}
 
+  @spec puzzle1(binary) :: number
   def puzzle1(input) do
     input
     |> parse_packets()
@@ -38,6 +37,7 @@ defmodule AdventOfCode.Day13 do
     |> Enum.sum()
   end
 
+  @spec puzzle2(binary) :: number
   def puzzle2(input) do
     input
     |> parse_packets()
@@ -50,7 +50,7 @@ defmodule AdventOfCode.Day13 do
     |> Enum.product()
   end
 
-  def parse_packets(input) do
+  defp parse_packets(input) do
     input
     |> String.split("\n", trim: true)
     |> Enum.map(fn str -> elem(Code.eval_string(str), 0) end)

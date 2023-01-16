@@ -1,13 +1,9 @@
 defmodule AdventOfCode.Day09 do
   @spec input :: binary
-  def input do
-    AdventOfCode.read_input(9)
-  end
+  def input, do: AdventOfCode.read_input(9)
 
-  @spec solution :: %{puzzle1: non_neg_integer, puzzle2: non_neg_integer}
-  def solution do
-    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
-  end
+  @spec solution :: %{p1: non_neg_integer, p2: non_neg_integer}
+  def solution, do: %{p1: puzzle1(input()), p2: puzzle2(input())}
 
   @spec puzzle1(binary) :: non_neg_integer
   def puzzle1(input) do

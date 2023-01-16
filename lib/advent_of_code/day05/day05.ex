@@ -1,13 +1,9 @@
 defmodule AdventOfCode.Day05 do
   @spec input :: binary
-  def input do
-    AdventOfCode.read_input(5)
-  end
+  def input, do: AdventOfCode.read_input(5)
 
-  @spec solution :: %{puzzle1: binary, puzzle2: binary}
-  def solution do
-    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
-  end
+  @spec solution :: %{p1: binary, p2: binary}
+  def solution, do: %{p1: puzzle1(input()), p2: puzzle2(input())}
 
   @spec puzzle1(binary) :: binary
   def puzzle1(input) do
@@ -69,9 +65,9 @@ defmodule AdventOfCode.Day05 do
       |> Enum.chunk_every(2)
       |> Enum.map(fn [k, v] -> {String.to_atom(k), String.to_integer(v)} end)
       |> Enum.into(%{})
-      |> (fn %{move: count, from: from, to: to} ->
-            %{move: count, from: from - 1, to: to - 1}
-          end).()
+      |> then(fn %{move: count, from: from, to: to} ->
+        %{move: count, from: from - 1, to: to - 1}
+      end)
     end)
   end
 

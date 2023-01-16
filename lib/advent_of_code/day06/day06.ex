@@ -1,25 +1,15 @@
 defmodule AdventOfCode.Day06 do
   @spec input :: binary
-  def input do
-    AdventOfCode.read_input(6)
-  end
+  def input, do: AdventOfCode.read_input(6)
 
-  @spec solution :: %{puzzle1: pos_integer, puzzle2: pos_integer}
-  def solution do
-    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
-  end
+  @spec solution :: %{p1: pos_integer, p2: pos_integer}
+  def solution, do: %{p1: puzzle1(input()), p2: puzzle2(input())}
 
   @spec puzzle1(binary) :: pos_integer
-  def puzzle1(input) do
-    input
-    |> first_non_repeating(4)
-  end
+  def puzzle1(input), do: first_non_repeating(input, 4)
 
   @spec puzzle2(binary) :: pos_integer
-  def puzzle2(input) do
-    input
-    |> first_non_repeating(14)
-  end
+  def puzzle2(input), do: first_non_repeating(input, 14)
 
   defp first_non_repeating([head | tail], window_size, n) do
     n_distinct =

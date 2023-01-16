@@ -1,21 +1,17 @@
 defmodule AdventOfCode.Day10 do
   @spec input :: binary
-  def input do
-    AdventOfCode.read_input(10)
-  end
+  def input, do: AdventOfCode.read_input(10)
 
-  @spec solution :: %{puzzle1: non_neg_integer, puzzle2: binary}
-  def solution do
-    %{puzzle1: puzzle1(input()), puzzle2: puzzle2(input())}
-  end
+  @spec solution :: %{p1: non_neg_integer, p2: binary}
+  def solution, do: %{p1: puzzle1(input()), p2: puzzle2(input())}
 
   @spec puzzle1(binary) :: non_neg_integer
   def puzzle1(input) do
     input
     |> value_by_cycle()
-    |> Enum.drop(19)
-    |> Enum.take_every(40)
-    |> Enum.map(fn {cycle, value} -> cycle * value end)
+    |> Stream.drop(19)
+    |> Stream.take_every(40)
+    |> Stream.map(fn {cycle, value} -> cycle * value end)
     |> Enum.sum()
   end
 
@@ -23,8 +19,8 @@ defmodule AdventOfCode.Day10 do
   def puzzle2(input) do
     input
     |> value_by_cycle()
-    |> Enum.chunk_every(40)
-    |> Enum.take(6)
+    |> Stream.chunk_every(40)
+    |> Stream.take(6)
     |> Enum.map_join("\n", &draw/1)
   end
 
